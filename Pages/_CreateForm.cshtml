@@ -1,0 +1,84 @@
+﻿@model FormBuilderDemo.Enities.FormField
+
+<div class="card">
+    <div class="card-header">
+        @*<form method="post" id="formFrm">*@
+        <input type="hidden" asp-for="FormId" />
+        <div class="row pb-2">
+            <div class="col-md-3">
+                <label class="">عنوان فرم</label>
+            </div>
+            <div class="col-md-6">
+                <input type="text" id="FormTitle" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label class="">نام لاتین</label>
+            </div>
+            <div class="col-md-6">
+                <input type="text" id="FormName" class="form-control" />
+            </div>
+            <div class="col-md-2">
+                <input type="button" class="btn btn-success" value="ثبت فرم" onclick="insertForm()" />
+            </div>
+        </div>
+        @*</form>*@
+    </div>
+    <div class="card-body">
+        <form method="post" id="fieldFrm">
+
+            <div class="form-group">
+                <label>عنوان فیلد</label>
+                <input type="text" asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>شناسه</label>
+                <input type="text" asp-for="UniqueName" class="form-control" />
+                <span asp-validation-for="UniqueName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>نوع فیلد</label>
+                <select asp-for="FieldType" class="form-control" onchange="isOptionable($(this).val())" asp-items="@Html.GetEnumSelectList<FieldTypes>()">
+                    <option value="-1">انتخاب کنید</option>
+                </select>
+                <span asp-validation-for="FieldType" class="text-danger"></span>
+            </div>
+            <div class="form-group d-none" id="options">
+                <p class="text-right">آیتم ها</p>
+                <div id="options_div">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control txtKey" placeholder="کلید" />
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" class="form-control txtValue" placeholder="مقدار" />
+                        </div>
+                        <div class="col-md-1">
+                            <span class="fa fa-plus text-success" onclick="addNewItem()"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="MaxLength"></label>
+                    <input type="number" asp-for="MaxLength" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <br />
+                    <input type="checkbox" asp-for="IsRequired" class="js-switch" />&nbsp; @Html.DisplayNameFor(x => x.IsRequired)
+                </div>
+            </div>
+
+            <div class="form-group text-center pt-4">
+                <input type="button" class="btn btn-success" value="ثبت" onclick="insertField();" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

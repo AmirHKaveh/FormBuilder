@@ -1,0 +1,50 @@
+﻿@model IEnumerable<FormField>
+
+
+@if (Model.Count() > 0)
+{
+   
+    <form id="@Model.FirstOrDefault().Form.Name" name="@Model.FirstOrDefault().Form.Name" method="post">
+        <input type="hidden" id="formId" value="@Model.FirstOrDefault().FormId" />
+        @foreach (var item in Model)
+        {
+            <div class="form-group text-right item">
+                @if (item.FieldType == FieldTypes.Selectbox)
+                {
+                    <p>@item.Title  <span class="fa fa-edit text-info btnEditField" data-id="@item.Id"></span> </p>
+                    <select class="form-control" name="@item.UniqueName">
+                        <option value="-1">آیتم پیش فرض</option>
+                        @{
+                            var options = System.Text.Json.JsonSerializer.Deserialize<List<OptionDTO>>(item.Options);
+                            foreach (var option in options)
+                            {
+                                <option value="@option.key">@option.value</option>
+                            }
+                        }
+                    </select>
+                }
+                else
+                {
+                    <span class="fa fa-edit text-info btnEditField" data-id="@item.Id"></span> @item.Title
+                    <input type="@((FieldTypes)item.FieldType)" @(item.IsRequired?"Required":"") class="@(item.FieldType == FieldTypes.Text || item.FieldType == FieldTypes.Number ? "form-control" : "")" name="@item.UniqueName" />
+                }
+            </div>
+        }
+
+        <input type="button" value="ثبت اطلاعات" class="btn btn-primary" onclick="submitForm()"/>
+    </form>
+}
+else
+{
+    <div class="alert alert-info text-center">
+        <span>برای این فرم فیلدی ثبت نشده است</span>
+    </div>
+}
+<script>
+    $(".btnEditField").on('click', function () {
+        var fieldId = $(this).attr('data-id');
+        $.get("/Index?handler=EditField", { id: fieldId }, function (result) {
+            $("#cu_div").html(result);
+        });
+    });
+</script>

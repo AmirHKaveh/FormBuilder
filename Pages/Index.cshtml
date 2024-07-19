@@ -1,0 +1,35 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    var formfields = new FormField();
+
+    var forms=TempData["Forms"] as SelectList;
+}
+
+<div class="row">
+    <div class="col-md-6" id="cu_div">
+        <partial name="_CreateForm" model="@formfields" />
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>فرم</label>
+            <select class="form-control" asp-items="@forms" id="form_ddl" onchange="getFormFields($(this).val());getFormFieldsTitle($(this).val())">
+                <option value="-1">انتخاب کنید</option>
+            </select>
+        </div>
+
+        <hr />
+        <div class="form-group" id="viewForm_div">
+
+        </div>
+
+
+    </div>
+</div>
+
+<div class="row">
+   <div class="col-12" id="viewAllFormFields"></div>
+</div>
+

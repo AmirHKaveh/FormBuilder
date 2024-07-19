@@ -1,0 +1,32 @@
+﻿@model IEnumerable<FormField>
+@{
+    var fieldsValuesCount = Convert.ToInt32(TempData["FieldsValuesCount"]);
+}
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                @foreach (var item in Model)
+                {
+                    <th>@item.Title</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+
+                @foreach (var field in Model)
+                {
+                    @await Component.InvokeAsync("FormFieldsValues", new { formId = Model.First().FormId, uniqueName = field.UniqueName });
+                }
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-primary">
+        <p>برای این فرم مقداری ثبت نشده است !</p>
+    </div>
+}
