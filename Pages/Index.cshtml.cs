@@ -133,34 +133,38 @@ namespace FormBuilderDemo.Pages
 
 
             #region FilesName
-            var namesString = data.FilesName.Remove(data.FilesName.LastIndexOf('='));
-            var namesList = namesString.Split('=');
-            Dictionary<string, string> namesDic = new Dictionary<string, string>();
-            foreach (var row in namesList)
+            if (!string.IsNullOrEmpty(data.FilesName))
             {
-                var item = row.Split('|');
-                namesDic.Add(item[0], item[1]);
-            }
-            #endregion
-            foreach (var item in data.Files)
-            {
-                var currentfileName = item.FileName;
-                var names = namesDic.Where(x => x.Value == currentfileName);
-                if (names.Any())
+                var namesString = data.FilesName.Remove(data.FilesName.LastIndexOf('='));
+                var namesList = namesString.Split('=');
+                Dictionary<string, string> namesDic = new Dictionary<string, string>();
+                foreach (var row in namesList)
                 {
-                    var name = names.FirstOrDefault();
-                    var gotName = name.Key; //Title of field
-
-                    var filePath = String.Format("/{0}/{1}", _filePath, item.FileName);
-                    var fullFilePath = String.Format("{0}/{1}", path, item.FileName);
-                    using (var stream = new FileStream(fullFilePath, FileMode.Create))
-                    {
-                        await item.CopyToAsync(stream);
-                    }
-
-                    obj.Add(gotName, filePath);
+                    var item = row.Split('|');
+                    namesDic.Add(item[0], item[1]);
                 }
 
+                #endregion
+                foreach (var item in data.Files)
+                {
+                    var currentfileName = item.FileName;
+                    var names = namesDic.Where(x => x.Value == currentfileName);
+                    if (names.Any())
+                    {
+                        var name = names.FirstOrDefault();
+                        var gotName = name.Key; //Title of field
+
+                        var filePath = String.Format("/{0}/{1}", _filePath, item.FileName);
+                        var fullFilePath = String.Format("{0}/{1}", path, item.FileName);
+                        using (var stream = new FileStream(fullFilePath, FileMode.Create))
+                        {
+                            await item.CopyToAsync(stream);
+                        }
+
+                        obj.Add(gotName, filePath);
+                    }
+
+                }
             }
             _db.FormData_tb.Add(new FormData()
             {
@@ -180,6 +184,6 @@ namespace FormBuilderDemo.Pages
             TempData["FieldsValuesCount"] = fieldsValuesCount;
             return Partial("_FormFields", formFields);
         }
-     
+
     }
 }

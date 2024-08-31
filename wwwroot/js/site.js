@@ -274,8 +274,11 @@ function isOptionable(thisValue) {
 
 
 function submitForm() {
-    var formName = document.getElementById("Form1"); //$("#viewForm_div").children('form').attr('id')
-    var data = "";
+    var formSubmitButton = document.getElementById('formSubmit_btn');
+
+    var form = formSubmitButton.parentNode;
+
+    //var data = "";
 
     //$("#" + formName + " :input").not(':input[type=button], :input[type=submit], :input[type=reset]').each(function () {
     //   // data.append($(this).attr('name'), $(this).val().trim());
@@ -284,8 +287,7 @@ function submitForm() {
     //});
 
 
-    console.log(formName)
-    var json = Array.from(new FormData(formName)).map(function (e, i) {
+    var json = Array.from(new FormData(form)).map(function (e, i) {
         if (typeof (e[1]) != "object") {
             this[e[0]] = e[1];
             return this;
@@ -311,10 +313,8 @@ function submitForm() {
     var str = JSON.stringify(json);
 
     fdata.append("FormValues", str);
-    for (var pair of fdata.entries()) {
-        console.log(pair[0] + ', ' + pair[1]);
-    }
-    var data = JSON.stringify(fdata);
+   
+    //var data = JSON.stringify(fdata);
 
     $.ajax({
         method: 'POST',
@@ -329,7 +329,7 @@ function submitForm() {
         success: function (result) {
             if (result == "ok") {
                 alert("اطلاعات با موفقیت ویرایش گردید");
-                $("#fieldFrmEdit")[0].reset();
+                form.reset();
                 createForm();
             }
             else if (result.status == "exist") {
