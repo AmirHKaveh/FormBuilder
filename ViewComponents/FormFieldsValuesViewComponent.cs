@@ -21,11 +21,15 @@ namespace FormBuilderDemo.ViewComponents
             _db = db;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int formId,string uniqueName)
+        public async Task<IViewComponentResult> InvokeAsync(int formId, string uniqueName)
         {
+            string value = "";
             var fieldsValues = await _db.FormData_tb.FirstOrDefaultAsync(x => x.FormId == formId);
-            var formValue =JObject.Parse(fieldsValues.FormValue);
-            var value = formValue[uniqueName].ToString();
+            if (fieldsValues is not null)
+            {
+                var formValue = JObject.Parse(fieldsValues.FormValue);
+                value = formValue[uniqueName].ToString();
+            }
 
             return await Task.FromResult((IViewComponentResult)View("FormFieldsValues", value));
         }

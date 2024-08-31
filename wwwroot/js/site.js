@@ -284,7 +284,7 @@ function submitForm() {
     //});
 
 
-
+    console.log(formName)
     var json = Array.from(new FormData(formName)).map(function (e, i) {
         if (typeof (e[1]) != "object") {
             this[e[0]] = e[1];
@@ -342,6 +342,7 @@ function submitForm() {
 }
 
 function getFormFieldsTitle(formId) {
+    console.log(formId)
     $.get("/Index?handler=FormFieldsTitle", { formId: formId }, function (result) {
         $("#viewAllFormFields").html(result);
     })
