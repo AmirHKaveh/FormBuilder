@@ -105,6 +105,7 @@ function insertField() {
             },
             success: function (result) {
                 if (result.status == "ok") {
+                    getFormFields(formId)
                     alert("اطلاعات با موفقیت ثبت گردید");
                     $("#fieldFrm")[0].reset();
                 }
@@ -238,6 +239,7 @@ function updateField() {
             },
             success: function (result) {
                 if (result.status == "ok") {
+                    getFormFields(formId)
                     alert("اطلاعات با موفقیت ویرایش گردید");
                     $("#fieldFrmEdit")[0].reset();
                     createForm();
