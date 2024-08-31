@@ -179,9 +179,9 @@ namespace FormBuilderDemo.Pages
         {
             var formFields = await _db.FormField_tb.Where(x => x.FormId == formId).ToListAsync();
 
-            var fieldsValuesCount = await _db.FormData_tb.CountAsync(x => x.FormId == formId);
+            var fieldsValues = await _db.FormData_tb.Where(x => x.FormId == formId).ToListAsync();
 
-            TempData["FieldsValuesCount"] = fieldsValuesCount;
+            TempData["FieldsValues"] = fieldsValues;
             return Partial("_FormFields", formFields);
         }
 

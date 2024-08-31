@@ -263,6 +263,12 @@ $("#options_div").on('click', '.btnRemoveItem', function () {
 });
 
 function isOptionable(thisValue) {
+    if (thisValue == 0) {
+        $('#maxField_div').removeClass('d-none');
+    }
+    else {
+        $('#maxField_div').addClass('d-none');
+    }
     if (thisValue == 4 || thisValue == "Selectbox") {
         $("#options").removeClass('d-none');
     }
@@ -328,6 +334,7 @@ function submitForm() {
         data: fdata,
         success: function (result) {
             if (result == "ok") {
+                getFormFieldsTitle(frmId)
                 alert("اطلاعات با موفقیت ویرایش گردید");
                 form.reset();
                 createForm();

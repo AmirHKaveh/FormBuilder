@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<FormField>
 @{
-    var fieldsValuesCount = Convert.ToInt32(TempData["FieldsValuesCount"]);
+    var fieldsValues = TempData["FieldsValues"] as List<FormData>;
+
+
 }
 @if (Model.Any())
 {
@@ -14,13 +16,23 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
 
-                @foreach (var field in Model)
-                {
-                    @await Component.InvokeAsync("FormFieldsValues", new { formId = Model.First().FormId, uniqueName = field.UniqueName });
-                }
-            </tr>
+
+            @foreach (var formData in fieldsValues)
+            {
+                <tr>
+                    @{
+                        var formValueObj = Newtonsoft.Json.Linq.JObject.Parse(formData.FormValue);
+
+                        foreach (var item in formValueObj)
+                        {
+                            <td>@item.Value</td>
+                        }
+                    }
+
+                </tr>
+            }
+
         </tbody>
     </table>
 }
